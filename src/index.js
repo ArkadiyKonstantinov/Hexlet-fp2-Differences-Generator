@@ -1,7 +1,16 @@
 import _ from 'lodash';
+import path from 'path';
+import fs from 'fs';
 import parseFile from './parsers.js';
 
-const getDiff = (obj1, obj2) => {
+const readFile = (filepath) => {
+  const fullPath = path.resolve(process.cwd(), filepath);
+  const format = path.extname(fullPath);
+  const data = fs.readFileSync(fullPath);
+  return { data, format };
+};
+
+const planeDiff = (obj1, obj2) => {
   const keys1 = Object.keys(obj1);
   const keys2 = Object.keys(obj2);
   const keys = _.union(keys1, keys2).sort();
@@ -26,7 +35,7 @@ const getDiff = (obj1, obj2) => {
 };
 
 export default (path1, path2) => {
-  const obj1 = parseFile(path1);
-  const obj2 = parseFile(path2);
-  return getDiff(obj1, obj2);
+  const obj1 = parseFile(readFile(path1));
+  const obj2 = parseFile(readFile(path2));
+  return planeDiff(obj1, obj2);
 };

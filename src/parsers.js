@@ -1,11 +1,6 @@
-import path from 'path';
-import fs from 'fs';
 import yaml from 'js-yaml';
 
-export default (filepath) => {
-  const fullPath = path.resolve(process.cwd(), filepath);
-  const format = path.extname(fullPath);
-  const data = fs.readFileSync(fullPath);
+export default ({ data, format }) => {
   let parse;
   if (format === '.json') {
     parse = JSON.parse;
