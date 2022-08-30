@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import getObjFromFile from './parsers.js';
+import parseFile from './parsers.js';
 
 const getDiff = (obj1, obj2) => {
   const keys1 = Object.keys(obj1);
@@ -26,7 +26,7 @@ const getDiff = (obj1, obj2) => {
 };
 
 export default (path1, path2) => {
-  const obj1 = getObjFromFile(path1);
-  const obj2 = getObjFromFile(path2);
+  const obj1 = parseFile(path1);
+  const obj2 = parseFile(path2);
   return getDiff(obj1, obj2);
 };

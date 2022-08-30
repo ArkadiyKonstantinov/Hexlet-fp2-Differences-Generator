@@ -4,13 +4,13 @@ import yaml from 'js-yaml';
 
 export default (filepath) => {
   const fullPath = path.resolve(process.cwd(), filepath);
-  const fileExtname = path.extname(fullPath);
+  const format = path.extname(fullPath);
   const data = fs.readFileSync(fullPath);
-  let obj = {};
-  if (fileExtname === '.json') {
-    obj = JSON.parse(data);
-  } else if (fileExtname === '.yml' || fileExtname === '.yaml') {
-    obj = yaml.load(data);
+  let parse;
+  if (format === '.json') {
+    parse = JSON.parse;
+  } else if (format === '.yml' || format === '.yaml') {
+    parse = yaml.load;
   }
-  return obj;
+  return parse(data);
 };
