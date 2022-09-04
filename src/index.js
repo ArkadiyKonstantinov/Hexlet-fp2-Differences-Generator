@@ -20,36 +20,37 @@ const genDifferencesTree = (left, right) => {
       const isRight = Object.hasOwn(right, key);
       const isEqual = Object.is(left[key], right[key]);
       const bothObject = _.isObject(left[key]) && _.isObject(right[key]);
-      if (bothObject) {
-        const type = 'nested';
-        const curentLeft = _.cloneDeep(left[key]);
-        const curentRight = _.cloneDeep(right[key]);
-        const value = genDifferencesTree(curentLeft, curentRight);
-        return { ...acc, [key]: { type, value } };
-      }
+      let result;
       if (!isLeft) {
         const type = 'added';
         const value = _.cloneDeep(right[key]);
-        return { ...acc, [key]: { type, value } };
+        result = { ...acc, [key]: { type, value } };
       }
       if (!isRight) {
         const type = 'removed';
         const value = _.cloneDeep(left[key]);
-        return { ...acc, [key]: { type, value } };
+        result = { ...acc, [key]: { type, value } };
       }
       if (isLeft && isRight && !isEqual) {
         const type = 'updated';
         const old = _.cloneDeep(left[key]);
         const updated = _.cloneDeep(right[key]);
         const value = { old, updated };
-        return { ...acc, [key]: { type, value } };
+        result = { ...acc, [key]: { type, value } };
       }
       if (isLeft && isRight && isEqual) {
         const type = 'equal';
         const value = _.cloneDeep(left[key]);
-        return { ...acc, [key]: { type, value } };
+        result = { ...acc, [key]: { type, value } };
       }
-      return { ...acc };
+      if (bothObject) {
+        const type = 'nested';
+        const curentLeft = _.cloneDeep(left[key]);
+        const curentRight = _.cloneDeep(right[key]);
+        const value = genDifferencesTree(curentLeft, curentRight);
+        result = { ...acc, [key]: { type, value } };
+      }
+      return result;
     }, {});
 };
 
@@ -77,33 +78,38 @@ const stylish = (differences, replacer = ' ', spacesCount = 2) => {
     const lines = keys
       .flatMap((key) => {
         const diff = currentDiff[key];
+        let result = [];
         switch (diff.type) {
           case 'nested': {
             const prefix = '  ';
-            return [`${currentIndent}${prefix}${key}: ${iter(diff.value, level + 1)}`];
+            result = [`${currentIndent}${prefix}${key}: ${iter(diff.value, level + 1)}`];
+            break;
           }
           case 'added': {
             const prefix = '+ ';
-            return [`${currentIndent}${prefix}${key}: ${stringify(diff.value, level + 1)}`];
+            result = [`${currentIndent}${prefix}${key}: ${stringify(diff.value, level + 1)}`];
+            break;
           }
           case 'removed': {
             const prefix = '- ';
-            return [`${currentIndent}${prefix}${key}: ${stringify(diff.value, level + 1)}`];
+            result = [`${currentIndent}${prefix}${key}: ${stringify(diff.value, level + 1)}`];
+            break;
           }
           case 'updated': {
             const { old, updated } = diff.value;
             const prefixOld = '- ';
             const prifixUpdatet = '+ ';
-            return [`${currentIndent}${prefixOld}${key}: ${stringify(old, level + 1)}`,
+            result = [`${currentIndent}${prefixOld}${key}: ${stringify(old, level + 1)}`,
               `${currentIndent}${prifixUpdatet}${key}: ${stringify(updated, level + 1)}`];
+            break;
           }
           case 'equal': {
             const prefix = '  ';
-            return [`${currentIndent}${prefix}${key}: ${stringify(diff.value, level + 1)}`];
+            result = [`${currentIndent}${prefix}${key}: ${stringify(diff.value, level + 1)}`];
+            break;
           }
-          default:
-            return [];
         }
+        return result;
       });
     return [start, ...lines, end].join('\n');
   };
