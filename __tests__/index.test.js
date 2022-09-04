@@ -1,29 +1,39 @@
 import { expect } from '@jest/globals';
-import getDiff from '../src/index.js';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import genDiff from '../src/index.js';
 
-const result = '{\n\t- follow: false\n\t  host: hexlet.io\n\t- proxy: 123.234.53.22\n\t- timeout: 50\n\t+ timeout: 20\n\t+ verbose: true\n}';
-const pathJSON1 = '__fixtures__/file1.json';
-const pathJSON2 = '__fixtures__/file2.json';
-const pathYml1 = '__fixtures__/file1.yml';
-const pathYml2 = '__fixtures__/file2.yml';
-const pathYaml1 = '__fixtures__/file1.yaml';
-const pathYaml2 = '__fixtures__/file2.yaml';
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const getFixturePath = (filename) => path.join(__dirname, '..', '__fixtures__', filename);
 
-test('gendiff .json files', () => {
-  expect(getDiff(pathJSON1, pathJSON2)).toEqual(result);
+const casesPlane = [
+  ['plane1.json', 'plane2.json'],
+  ['plane1.yml', 'plane2.yml'],
+  ['plane1.yaml', 'plane2.yaml'],
+  ['plane1.yml', 'plane2.yaml'],
+  ['plane1.json', 'plane2.yaml'],
+];
+
+const casesNested = [
+  ['nested1.json', 'nested2.json'],
+  ['nested1.yml', 'nested2.yml'],
+  ['nested1.yaml', 'nested2.yaml'],
+  ['nested1.yml', 'nested2.yaml'],
+  ['nested1.json', 'nested2.yaml'],
+];
+
+const expectedPlain = fs.readFileSync(getFixturePath('resultPlain.txt'), 'utf-8');
+const expectedNested = fs.readFileSync(getFixturePath('resultNested.txt'), 'utf-8');
+
+describe.each(casesPlane)('plane', (file1, file2) => {
+  const path1 = getFixturePath(file1);
+  const path2 = getFixturePath(file2);
+  test('plain object', () => expect(genDiff(path1, path2)).toEqual(expectedPlain));
 });
 
-test('gendiff .yml files', () => {
-  expect(getDiff(pathYml1, pathYml2)).toEqual(result);
-});
-
-test('gendiff .yaml files', () => {
-  expect(getDiff(pathYaml1, pathYaml2)).toEqual(result);
-});
-
-test('gendiff difrent file types', () => {
-  expect(getDiff(pathJSON1, pathYml2)).toEqual(result);
-  expect(getDiff(pathJSON1, pathYaml2)).toEqual(result);
-  expect(getDiff(pathYml1, pathJSON2)).toEqual(result);
-  expect(getDiff(pathYaml1, pathJSON2)).toEqual(result);
+describe.each(casesNested)('nested', (file1, file2) => {
+  const path1 = getFixturePath(file1);
+  const path2 = getFixturePath(file2);
+  test('nested object', () => expect(genDiff(path1, path2)).toEqual(expectedNested));
 });
