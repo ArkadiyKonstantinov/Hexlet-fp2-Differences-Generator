@@ -1,14 +1,14 @@
 import _ from 'lodash';
 import path from 'path';
 import fs from 'fs';
-import parseFile from './parsers.js';
+import parse from './parsers.js';
 import formatter from '../formatters/index.js';
 
 const readFile = (filepath) => {
   const fullPath = path.resolve(process.cwd(), filepath);
-  const format = path.extname(fullPath);
+  const extName = path.extname(fullPath);
   const data = fs.readFileSync(fullPath);
-  return { data, format };
+  return { data, extName };
 };
 
 const genDifferencesTree = (left, right) => {
@@ -56,8 +56,8 @@ const genDifferencesTree = (left, right) => {
 };
 
 export default (path1, path2, formatName = 'stylish') => {
-  const obj1 = parseFile(readFile(path1));
-  const obj2 = parseFile(readFile(path2));
+  const obj1 = parse(readFile(path1));
+  const obj2 = parse(readFile(path2));
   const diff = genDifferencesTree(obj1, obj2);
   return formatter(diff, formatName);
 };
