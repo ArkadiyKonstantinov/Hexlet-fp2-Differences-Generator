@@ -22,33 +22,29 @@ const genDifferencesTree = (left, right) => {
       const isEqual = Object.is(left[key], right[key]);
       const bothObject = _.isObject(left[key]) && _.isObject(right[key]);
       let result;
-      if (!isLeft) {
-        const type = 'added';
-        const value = _.cloneDeep(right[key]);
-        result = { ...acc, [key]: { type, value } };
-      }
-      if (!isRight) {
-        const type = 'removed';
-        const value = _.cloneDeep(left[key]);
-        result = { ...acc, [key]: { type, value } };
-      }
-      if (isLeft && isRight && !isEqual) {
-        const type = 'updated';
-        const old = _.cloneDeep(left[key]);
-        const updated = _.cloneDeep(right[key]);
-        const value = { old, updated };
-        result = { ...acc, [key]: { type, value } };
-      }
-      if (isLeft && isRight && isEqual) {
-        const type = 'equal';
-        const value = _.cloneDeep(left[key]);
-        result = { ...acc, [key]: { type, value } };
-      }
       if (bothObject) {
         const type = 'nested';
         const curentLeft = _.cloneDeep(left[key]);
         const curentRight = _.cloneDeep(right[key]);
         const value = genDifferencesTree(curentLeft, curentRight);
+        result = { ...acc, [key]: { type, value } };
+      } else if (!isLeft) {
+        const type = 'added';
+        const value = _.cloneDeep(right[key]);
+        result = { ...acc, [key]: { type, value } };
+      } else if (!isRight) {
+        const type = 'removed';
+        const value = _.cloneDeep(left[key]);
+        result = { ...acc, [key]: { type, value } };
+      } else if (isLeft && isRight && !isEqual) {
+        const type = 'updated';
+        const old = _.cloneDeep(left[key]);
+        const updated = _.cloneDeep(right[key]);
+        const value = { old, updated };
+        result = { ...acc, [key]: { type, value } };
+      } else if (isLeft && isRight && isEqual) {
+        const type = 'equal';
+        const value = _.cloneDeep(left[key]);
         result = { ...acc, [key]: { type, value } };
       }
       return result;

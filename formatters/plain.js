@@ -10,7 +10,7 @@ const getCurrentValue = (value) => {
   return value;
 };
 
-const plane = (differences, keyPath = []) => {
+const plain = (differences, keyPath = []) => {
   const keys = Object.keys(differences).sort();
   const lines = keys
     .flatMap((key) => {
@@ -19,7 +19,7 @@ const plane = (differences, keyPath = []) => {
       let result;
       switch (type) {
         case 'nested': {
-          result = plane(value, currentKeyPath);
+          result = plain(value, currentKeyPath);
           break;
         }
         case 'added': {
@@ -48,4 +48,4 @@ const plane = (differences, keyPath = []) => {
   return lines.join('\n');
 };
 
-export default plane;
+export default plain;

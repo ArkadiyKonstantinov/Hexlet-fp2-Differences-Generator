@@ -14,8 +14,8 @@ const casesSimple = [
   ['simple1.yml', 'simple2.yml', undefined, expectedData[0]],
   ['simple1.yaml', 'simple2.yaml', 'stylish', expectedData[0]],
   ['simple1.yml', 'simple2.yaml', 'stylish', expectedData[0]],
-  ['simple1.yml', 'simple2.yaml', 'plane', expectedData[1]],
-  ['simple1.json', 'simple2.yaml', 'plane', expectedData[1]],
+  ['simple1.yml', 'simple2.yaml', 'plain', expectedData[1]],
+  ['simple1.json', 'simple2.yaml', 'plain', expectedData[1]],
 ];
 
 const casesNested = [
@@ -23,8 +23,8 @@ const casesNested = [
   ['nested1.yml', 'nested2.yml', undefined, expectedData[2]],
   ['nested1.yaml', 'nested2.yaml', 'stylish', expectedData[2]],
   ['nested1.json', 'nested2.yaml', 'stylish', expectedData[2]],
-  ['nested1.yml', 'nested2.json', 'plane', expectedData[3]],
-  ['nested1.yaml', 'nested2.yml', 'plane', expectedData[3]],
+  ['nested1.yml', 'nested2.json', 'plain', expectedData[3]],
+  ['nested1.yaml', 'nested2.yml', 'plain', expectedData[3]],
 ];
 
 describe.each(casesSimple)('genDiff simple files', (file1, file2, format, expected) => {
