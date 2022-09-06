@@ -14,6 +14,9 @@ Property 'timeout' was updated. From 50 to 20
 Property 'verbose' was added with value: true
 
 
+{"host":{"type":"equal","value":"hexlet.io"},"timeout":{"type":"updated","value":{"old":50,"updated":20}},"proxy":{"type":"removed","value":"123.234.53.22"},"follow":{"type":"removed","value":false},"verbose":{"type":"added","value":true}}
+
+
 {
     common: {
     + follow: false
@@ -71,3 +74,6 @@ Property 'group1.baz' was updated. From 'bas' to 'bars'
 Property 'group1.nest' was updated. From [complex value] to 'str'
 Property 'group2' was removed
 Property 'group3' was added with value: [complex value]
+
+
+{"common":{"type":"nested","value":{"setting1":{"type":"equal","value":"Value 1"},"setting2":{"type":"removed","value":200},"setting3":{"type":"updated","value":{"old":true,"updated":null}},"setting6":{"type":"nested","value":{"key":{"type":"equal","value":"value"},"doge":{"type":"nested","value":{"wow":{"type":"updated","value":{"old":"","updated":"so much"}}}},"ops":{"type":"added","value":"vops"}}},"follow":{"type":"added","value":false},"setting4":{"type":"added","value":"blah blah"},"setting5":{"type":"added","value":{"key5":"value5"}}}},"group1":{"type":"nested","value":{"baz":{"type":"updated","value":{"old":"bas","updated":"bars"}},"foo":{"type":"equal","value":"bar"},"nest":{"type":"updated","value":{"old":{"key":"value"},"updated":"str"}}}},"group2":{"type":"removed","value":{"abc":12345,"deep":{"id":45}}},"group3":{"type":"added","value":{"deep":{"id":{"number":45}},"fee":100500}}}
