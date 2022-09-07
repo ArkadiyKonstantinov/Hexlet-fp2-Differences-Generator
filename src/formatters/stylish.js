@@ -2,11 +2,11 @@ import _ from 'lodash';
 
 const getIndent = (position, level) => {
   const replacer = ' ';
-  const spacesCount = 2;
-  const prefixSize = spacesCount * level;
+  const spacesCount = 4;
+  const prefixSize = spacesCount * level - 2;
   const indent = {
     current: `${replacer.repeat(prefixSize)}`,
-    bracket: `${replacer.repeat(prefixSize - spacesCount)}`,
+    bracket: `${replacer.repeat(prefixSize - 2)}`,
   };
   return indent[position];
 };
@@ -17,7 +17,7 @@ const stringify = (currentValue, level = 1) => {
   }
   const keys = Object.keys(currentValue);
   const strings = keys
-    .map((key) => `${getIndent('current', level)}${key}: ${stringify(currentValue[key], level + 1)}`);
+    .map((key) => `${getIndent('current', level)}  ${key}: ${stringify(currentValue[key], level + 1)}`);
   return ['{', ...strings, `${getIndent('bracket', level)}}`].join('\n');
 };
 
