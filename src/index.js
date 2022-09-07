@@ -8,7 +8,7 @@ const readFile = (filepath) => {
   const fullPath = path.resolve(process.cwd(), filepath);
   const extName = path.extname(fullPath);
   const data = fs.readFileSync(fullPath);
-  return { data, extName };
+  return parse(data, extName);
 };
 
 const genDifferences = (left, right) => {
@@ -36,8 +36,8 @@ const genDifferences = (left, right) => {
 };
 
 export default (path1, path2, formatName = 'stylish') => {
-  const obj1 = parse(readFile(path1));
-  const obj2 = parse(readFile(path2));
+  const obj1 = readFile(path1);
+  const obj2 = readFile(path2);
   const diff = genDifferences(obj1, obj2);
   return format(diff, formatName);
 };

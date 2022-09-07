@@ -1,6 +1,6 @@
 import yaml from 'js-yaml';
 
-export default ({ data, extName }) => {
+export default (data, extName) => {
   let parse;
   if (extName === '.json') {
     parse = JSON.parse;
