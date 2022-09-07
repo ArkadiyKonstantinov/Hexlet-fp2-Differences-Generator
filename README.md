@@ -15,6 +15,7 @@ Compares two configuration files and shows a difference. Supporting formats: JSO
 - Clone repository: `git clone git@github.com:ArkadiyKonstantinov/frontend-project-lvl2.git`
 - Change directory to frontend-project-lvl2
 - Run the command: `make install`
+- Run the command: `npm link`
 
 
 ## How to use
