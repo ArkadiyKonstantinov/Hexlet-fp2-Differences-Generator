@@ -11,39 +11,26 @@ const getCurrentValue = (value) => {
 };
 
 const plain = (differences, keyPath = []) => {
-  const keys = Object.keys(differences).sort();
-  const lines = keys
-    .flatMap((key) => {
-      const currentKeyPath = [...keyPath, key];
-      const { type, value } = differences[key];
-      let result;
-      switch (type) {
+  const lines = differences
+    .flatMap((diff) => {
+      const currentKeyPath = [...keyPath, diff.key];
+      switch (diff.type) {
         case 'nested': {
-          result = plain(value, currentKeyPath);
-          break;
+          return plain(diff.children, currentKeyPath);
         }
         case 'added': {
-          const currentValue = getCurrentValue(value);
-          result = `Property '${currentKeyPath.join('.')}' was ${type} with value: ${currentValue}`;
-          break;
+          return `Property '${currentKeyPath.join('.')}' was ${diff.type} with value: ${getCurrentValue(diff.value)}`;
         }
         case 'removed': {
-          result = `Property '${currentKeyPath.join('.')}' was ${type}`;
-          break;
+          return `Property '${currentKeyPath.join('.')}' was ${diff.type}`;
         }
         case 'updated': {
-          const { old, updated } = value;
-          const currentOld = getCurrentValue(old);
-          const currentUpdated = getCurrentValue(updated);
-          result = `Property '${currentKeyPath.join('.')}' was ${type}. From ${currentOld} to ${currentUpdated}`;
-          break;
+          return `Property '${currentKeyPath.join('.')}' was ${diff.type}. From ${getCurrentValue(diff.old)} to ${getCurrentValue(diff.updated)}`;
         }
         default: {
-          result = [];
-          break;
+          return [];
         }
       }
-      return result;
     });
   return lines.join('\n');
 };
