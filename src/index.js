@@ -6,7 +6,7 @@ import format from './formatters/index.js';
 
 const readFile = (filepath) => {
   const fullPath = path.resolve(process.cwd(), filepath);
-  const extName = path.extname(fullPath);
+  const extName = path.extname(fullPath).slice(1);
   const data = fs.readFileSync(fullPath);
   return parse(data, extName);
 };
