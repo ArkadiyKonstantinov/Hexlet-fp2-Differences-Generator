@@ -22,8 +22,8 @@ const stringify = (currentValue, level = 1) => {
 };
 
 const stylish = (differences) => {
-  const iter = (currentDiff, level = 1) => {
-    const lines = currentDiff
+  const iter = (currentDifferences, level = 1) => {
+    const lines = currentDifferences
       .flatMap((diff) => {
         switch (diff.type) {
           case 'nested': {
