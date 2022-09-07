@@ -8,7 +8,7 @@
 ## Description
 Compares two configuration files and shows a difference. Supporting formats: JSON, YML, YAML
 
-[![asciicast](https://asciinema.org/a/xpr796qXvC8FYTPTp6H8A2dcF.svg)](https://asciinema.org/a/xpr796qXvC8FYTPTp6H8A2dcF)
+[![asciicast](https://asciinema.org/a/YrtCROHa6sPLVujVeTA4uc45C.svg)](https://asciinema.org/a/YrtCROHa6sPLVujVeTA4uc45C)
 
 ## Installation
 - Make sure you have installed Node.js no lower version 12: `node -v`
