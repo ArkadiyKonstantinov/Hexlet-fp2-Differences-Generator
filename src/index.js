@@ -12,7 +12,7 @@ const parseFile = (filepath) => {
 };
 
 const genDifferences = (left, right) => {
-  const keys = _.union(Object.keys(left), Object.keys(right)).sort();
+  const keys = _.sortBy(_.union(Object.keys(left), Object.keys(right)));
   return keys
     .map((key) => {
       const leftValue = _.cloneDeep(left[key]);
