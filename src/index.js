@@ -4,7 +4,7 @@ import fs from 'fs';
 import parse from './parsers.js';
 import format from './formatters/index.js';
 
-const readFile = (filepath) => {
+const parseFile = (filepath) => {
   const fullPath = path.resolve(process.cwd(), filepath);
   const extName = path.extname(fullPath).slice(1);
   const data = fs.readFileSync(fullPath);
@@ -36,8 +36,8 @@ const genDifferences = (left, right) => {
 };
 
 export default (path1, path2, formatName = 'stylish') => {
-  const obj1 = readFile(path1);
-  const obj2 = readFile(path2);
+  const obj1 = parseFile(path1);
+  const obj2 = parseFile(path2);
   const diff = genDifferences(obj1, obj2);
   return format(diff, formatName);
 };
