@@ -11,49 +11,34 @@ const readFile = (filepath) => {
   return { data, extName };
 };
 
-const genDifferencesTree = (left, right) => {
-  const keys1 = Object.keys(left);
-  const keys2 = Object.keys(right);
-  const keys = _.union(keys1, keys2);
+const genDifferences = (left, right) => {
+  const keys = _.union(Object.keys(left), Object.keys(right));
   return keys
     .reduce((acc, key) => {
-      const isLeft = Object.hasOwn(left, key);
-      const isRight = Object.hasOwn(right, key);
-      const isEqual = Object.is(left[key], right[key]);
-      const bothObject = _.isObject(left[key]) && _.isObject(right[key]);
-      let result;
-      if (bothObject) {
-        const type = 'nested';
-        const curentLeft = _.cloneDeep(left[key]);
-        const curentRight = _.cloneDeep(right[key]);
-        const value = genDifferencesTree(curentLeft, curentRight);
-        result = { ...acc, [key]: { type, value } };
-      } else if (!isLeft) {
-        const type = 'added';
-        const value = _.cloneDeep(right[key]);
-        result = { ...acc, [key]: { type, value } };
-      } else if (!isRight) {
-        const type = 'removed';
-        const value = _.cloneDeep(left[key]);
-        result = { ...acc, [key]: { type, value } };
-      } else if (isLeft && isRight && !isEqual) {
-        const type = 'updated';
-        const old = _.cloneDeep(left[key]);
-        const updated = _.cloneDeep(right[key]);
-        const value = { old, updated };
-        result = { ...acc, [key]: { type, value } };
-      } else if (isLeft && isRight && isEqual) {
-        const type = 'equal';
-        const value = _.cloneDeep(left[key]);
-        result = { ...acc, [key]: { type, value } };
+      if (_.isObject(left[key]) && _.isObject(right[key])) {
+        const value = genDifferences(_.cloneDeep(left[key]), _.cloneDeep(right[key]));
+        return { ...acc, [key]: { type: 'nested', value } };
       }
-      return result;
+      if (!Object.hasOwn(left, key)) {
+        const value = _.cloneDeep(right[key]);
+        return { ...acc, [key]: { type: 'added', value } };
+      }
+      if (!Object.hasOwn(right, key)) {
+        const value = _.cloneDeep(left[key]);
+        return { ...acc, [key]: { type: 'removed', value } };
+      }
+      if (!Object.is(left[key], right[key])) {
+        const value = { old: _.cloneDeep(left[key]), updated: _.cloneDeep(right[key]) };
+        return { ...acc, [key]: { type: 'updated', value } };
+      }
+      const value = _.cloneDeep(left[key]);
+      return { ...acc, [key]: { type: 'equal', value } };
     }, {});
 };
 
 export default (path1, path2, formatName = 'stylish') => {
   const obj1 = parse(readFile(path1));
   const obj2 = parse(readFile(path2));
-  const diff = genDifferencesTree(obj1, obj2);
+  const diff = genDifferences(obj1, obj2);
   return format(diff, formatName);
 };
