@@ -1,4 +1,4 @@
-# Generator of difference
+# Differences generator
 ### Status:
 [![Actions Status](https://github.com/ArkadiyKonstantinov/frontend-project-lvl2/workflows/hexlet-check/badge.svg)](https://github.com/ArkadiyKonstantinov/frontend-project-lvl2/actions)
 [![CI](https://github.com/ArkadiyKonstantinov/frontend-project-lvl2/actions/workflows/ci.yml/badge.svg)](https://github.com/ArkadiyKonstantinov/frontend-project-lvl2/actions/workflows/ci.yml)
@@ -7,6 +7,7 @@
 
 ## Description
 Compares two configuration files and shows a difference. Supporting formats: JSON, YML, YAML
+This is the second educational project for the Hexlet school.
 
 [![asciicast](https://asciinema.org/a/YrtCROHa6sPLVujVeTA4uc45C.svg)](https://asciinema.org/a/YrtCROHa6sPLVujVeTA4uc45C)
 
