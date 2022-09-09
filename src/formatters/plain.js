@@ -10,28 +10,22 @@ const stringify = (value) => {
   return `${value}`;
 };
 
+const stringTypes = {
+  nested: (diff, currentPath, iter) => iter(diff.children, currentPath),
+  added: (diff, currentPath) => `Property '${currentPath.join('.')}' was ${diff.type} with value: ${stringify(diff.value)}`,
+  removed: (diff, currentPath) => `Property '${currentPath.join('.')}' was ${diff.type}`,
+  updated: (diff, currentPath) => `Property '${currentPath.join('.')}' was ${diff.type}. From ${stringify(diff.old)} to ${stringify(diff.updated)}`,
+  equal: () => [],
+};
+
 const plain = (differences) => {
   const iter = (currentDifferences, path = []) => {
     const lines = currentDifferences
       .flatMap((diff) => {
         const currentPath = [...path, diff.key];
-        switch (diff.type) {
-          case 'nested': {
-            return iter(diff.children, currentPath);
-          }
-          case 'added': {
-            return `Property '${currentPath.join('.')}' was ${diff.type} with value: ${stringify(diff.value)}`;
-          }
-          case 'removed': {
-            return `Property '${currentPath.join('.')}' was ${diff.type}`;
-          }
-          case 'updated': {
-            return `Property '${currentPath.join('.')}' was ${diff.type}. From ${stringify(diff.old)} to ${stringify(diff.updated)}`;
-          }
-          default: {
-            return [];
-          }
-        }
+        return diff.type === 'nested'
+          ? stringTypes[diff.type](diff, currentPath, iter)
+          : stringTypes[diff.type](diff, currentPath);
       });
     return lines.join('\n');
   };
