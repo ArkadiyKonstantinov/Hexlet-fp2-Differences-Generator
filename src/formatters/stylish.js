@@ -21,29 +21,21 @@ const stringify = (currentValue, level = 1) => {
   return ['{', ...strings, `${getIndent('bracket', level)}}`].join('\n');
 };
 
+const stringTypes = {
+  nested: (diff, level, iter) => `${getIndent('current', level)}  ${diff.key}: ${iter(diff.children, level + 1)}`,
+  added: (diff, level) => `${getIndent('current', level)}+ ${diff.key}: ${stringify(diff.value, level + 1)}`,
+  removed: (diff, level) => `${getIndent('current', level)}- ${diff.key}: ${stringify(diff.value, level + 1)}`,
+  updated: (diff, level) => [`${getIndent('current', level)}- ${diff.key}: ${stringify(diff.old, level + 1)}`,
+    `${getIndent('current', level)}+ ${diff.key}: ${stringify(diff.updated, level + 1)}`],
+  equal: (diff, level) => `${getIndent('current', level)}  ${diff.key}: ${stringify(diff.value, level + 1)}`,
+};
+
 const stylish = (differences) => {
   const iter = (currentDifferences, level = 1) => {
     const lines = currentDifferences
-      .flatMap((diff) => {
-        switch (diff.type) {
-          case 'nested': {
-            return `${getIndent('current', level)}  ${diff.key}: ${iter(diff.children, level + 1)}`;
-          }
-          case 'added': {
-            return [`${getIndent('current', level)}+ ${diff.key}: ${stringify(diff.value, level + 1)}`];
-          }
-          case 'removed': {
-            return [`${getIndent('current', level)}- ${diff.key}: ${stringify(diff.value, level + 1)}`];
-          }
-          case 'updated': {
-            return [`${getIndent('current', level)}- ${diff.key}: ${stringify(diff.old, level + 1)}`,
-              `${getIndent('current', level)}+ ${diff.key}: ${stringify(diff.updated, level + 1)}`];
-          }
-          default: { // case 'equal'
-            return [`${getIndent('current', level)}  ${diff.key}: ${stringify(diff.value, level + 1)}`];
-          }
-        }
-      });
+      .flatMap((diff) => (diff.type === 'nested'
+        ? stringTypes[diff.type](diff, level, iter)
+        : stringTypes[diff.type](diff, level)));
     return ['{', ...lines, `${getIndent('bracket', level)}}`].join('\n');
   };
   return iter(differences, 1);
