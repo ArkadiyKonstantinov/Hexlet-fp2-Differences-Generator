@@ -27,10 +27,10 @@ const stringTypes = {
   removed: (diff, level) => `${getIndent('current', level)}- ${diff.key}: ${stringify(diff.value, level + 1)}`,
   updated: (diff, level) => [`${getIndent('current', level)}- ${diff.key}: ${stringify(diff.old, level + 1)}`,
     `${getIndent('current', level)}+ ${diff.key}: ${stringify(diff.updated, level + 1)}`],
-  equal: (diff, level) => `${getIndent('current', level)}  ${diff.key}: ${stringify(diff.value, level + 1)}`,
+  unchanged: (diff, level) => `${getIndent('current', level)}  ${diff.key}: ${stringify(diff.value, level + 1)}`,
 };
 
-const stylish = (differences) => {
+const formatStylish = (differences) => {
   const iter = (currentDifferences, level = 1) => {
     const lines = currentDifferences
       .flatMap((diff) => (diff.type === 'nested'
@@ -41,4 +41,4 @@ const stylish = (differences) => {
   return iter(differences, 1);
 };
 
-export default stylish;
+export default formatStylish;

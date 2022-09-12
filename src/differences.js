@@ -20,7 +20,7 @@ const genDifferences = (left, right) => {
           key, type: 'updated', old: leftValue, updated: rightValue,
         };
       }
-      return { key, type: 'equal', value: leftValue };
+      return { key, type: 'unchanged', value: leftValue };
     });
 };
 

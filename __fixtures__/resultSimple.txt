@@ -14,4 +14,4 @@ Property 'timeout' was updated. From 50 to 20
 Property 'verbose' was added with value: true
 
 
-[{"key":"follow","type":"removed","value":false},{"key":"host","type":"equal","value":"hexlet.io"},{"key":"proxy","type":"removed","value":"123.234.53.22"},{"key":"timeout","type":"updated","old":50,"updated":20},{"key":"verbose","type":"added","value":true}]
+[{"key":"follow","type":"removed","value":false},{"key":"host","type":"unchanged","value":"hexlet.io"},{"key":"proxy","type":"removed","value":"123.234.53.22"},{"key":"timeout","type":"updated","old":50,"updated":20},{"key":"verbose","type":"added","value":true}]

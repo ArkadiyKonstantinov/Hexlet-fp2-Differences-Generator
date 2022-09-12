@@ -15,10 +15,10 @@ const stringTypes = {
   added: (diff, currentPath) => `Property '${currentPath.join('.')}' was ${diff.type} with value: ${stringify(diff.value)}`,
   removed: (diff, currentPath) => `Property '${currentPath.join('.')}' was ${diff.type}`,
   updated: (diff, currentPath) => `Property '${currentPath.join('.')}' was ${diff.type}. From ${stringify(diff.old)} to ${stringify(diff.updated)}`,
-  equal: () => [],
+  unchanged: () => [],
 };
 
-const plain = (differences) => {
+const formatPlain = (differences) => {
   const iter = (currentDifferences, path = []) => {
     const lines = currentDifferences
       .flatMap((diff) => {
@@ -32,4 +32,4 @@ const plain = (differences) => {
   return iter(differences);
 };
 
-export default plain;
+export default formatPlain;
